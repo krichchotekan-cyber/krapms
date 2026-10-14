@@ -4,6 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "KRA Hotel PMS - Bu-Gaan & Thanawong",
   description: "ระบบบริหารจัดการโรงแรม Multi-Property (Bu-Gaan Sukhothai Village & Thanawong Pool Villa)",
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

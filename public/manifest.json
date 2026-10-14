@@ -1,0 +1,20 @@
+{
+  "name": "KRA Hotel PMS - Bu-Gaan & Thanawong",
+  "short_name": "KRA PMS",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#faf8f5",
+  "theme_color": "#1e293b",
+  "icons": [
+    {
+      "src": "/logos/bugaan-logo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/logos/thanawong-logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}
