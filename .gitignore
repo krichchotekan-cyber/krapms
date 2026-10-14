@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# deployment builds
+hotel-pms-directadmin/
+hotel-pms-directadmin.zip
+
+# ide and agent tool directories
+.claude/
+.cursor/
+.devin/

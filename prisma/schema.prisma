@@ -1,0 +1,230 @@
+// Prisma Schema for Hotel Property Management System (PMS)
+// Multi-Property: Bu-Gaan Sukhothai Village & Thanawong Pool Villa
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum PropertySlug {
+  BU_GAAN_SUKHOTHAI
+  THANAWONG_POOL_VILLA
+}
+
+enum RoomType {
+  DELUXE_VILLA
+  POOL_VILLA_FAMILY
+  SUITE_PREMIER
+  MEETING_ROOM_GRAND
+  MEETING_ROOM_VIP
+}
+
+enum RoomStatus {
+  AVAILABLE
+  OCCUPIED
+  CLEANING
+  MAINTENANCE
+}
+
+enum BookingSource {
+  BOOKING_COM
+  AGODA
+  AIRBNB
+  WALK_IN
+  DIRECT_CALL
+  FACEBOOK_LINE
+  EXPEDIA
+  OTHER
+}
+
+enum BookingStatus {
+  CONFIRMED
+  CHECKED_IN
+  CHECKED_OUT
+  CANCELLED
+  NO_SHOW
+}
+
+enum PaymentStatus {
+  UNPAID
+  PARTIALLY_PAID
+  PAID
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CASH
+  PROMPTPAY_QR
+  CREDIT_CARD
+  BANK_TRANSFER
+  ROOM_CHARGE
+}
+
+enum MenuCategory {
+  FOOD
+  BEVERAGE
+  MINIBAR
+  SPECIAL_SET
+}
+
+enum MeetingSession {
+  MORNING
+  AFTERNOON
+  FULL_DAY
+}
+
+model Property {
+  id          String      @id @default(uuid())
+  slug        PropertySlug @unique
+  name        String
+  tagline     String?
+  address     String
+  phoneNumber String
+  email       String
+  rooms       Room[]
+  bookings    Booking[]
+  menuItems   MenuItem[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Room {
+  id           String      @id @default(uuid())
+  propertyId   String
+  property     Property    @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  roomNumber   String
+  name         String
+  type         RoomType
+  isMeetingRoom Boolean    @default(false)
+  capacityAdults Int       @default(2)
+  capacityKids   Int       @default(1)
+  basePricePerNight Float
+  status       RoomStatus  @default(AVAILABLE)
+  floor        Int         @default(1)
+  amenities    String[]    @default([])
+  description  String?
+  bookings     Booking[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@unique([propertyId, roomNumber])
+}
+
+model Guest {
+  id          String     @id @default(uuid())
+  firstName   String
+  lastName    String
+  phoneNumber String
+  email       String?
+  idCardOrPassport String?
+  nationality String?    @default("Thai")
+  notes       String?
+  bookings    Booking[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Booking {
+  id             String         @id @default(uuid())
+  bookingNumber  String         @unique // e.g. BG-202610-001
+  propertyId     String
+  property       Property       @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  roomId         String
+  room           Room           @relation(fields: [roomId], references: [id])
+  guestId        String
+  guest          Guest          @relation(fields: [guestId], references: [id])
+  
+  source         BookingSource  @default(WALK_IN)
+  status         BookingStatus  @default(CONFIRMED)
+  
+  checkInDate    DateTime
+  checkOutDate   DateTime
+  estimatedArrivalTime String? // e.g. "14:00"
+  
+  adultsCount    Int            @default(2)
+  kidsCount      Int            @default(0)
+  
+  // Extra Bed
+  hasExtraBed    Boolean        @default(false)
+  extraBedCount  Int            @default(0)
+  extraBedRatePerNight Float    @default(500)
+  
+  // For Meeting Room reservations
+  meetingSession MeetingSession?
+  
+  roomTotal      Float          @default(0)
+  extraBedTotal  Float          @default(0)
+  discountTotal  Float          @default(0)
+  grandTotal     Float          @default(0)
+  depositPaid    Float          @default(0)
+  
+  specialRequests String?
+  checkedInAt    DateTime?
+  checkedOutAt   DateTime?
+  
+  orders         Order[]
+  transactions   Transaction[]
+  
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+model MenuItem {
+  id          String        @id @default(uuid())
+  propertyId  String
+  property    Property      @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  name        String
+  nameTh      String?
+  category    MenuCategory  @default(FOOD)
+  price       Float
+  imageUrl    String?
+  isAvailable Boolean       @default(true)
+  description String?
+  orderItems  OrderItem[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Order {
+  id             String         @id @default(uuid())
+  orderNumber    String         @unique
+  bookingId      String?
+  booking        Booking?       @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+  roomNumber     String?
+  totalAmount    Float          @default(0)
+  isPaid         Boolean        @default(false)
+  isRoomCharge   Boolean        @default(true)
+  paymentMethod  PaymentMethod  @default(ROOM_CHARGE)
+  notes          String?
+  items          OrderItem[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+model OrderItem {
+  id         String    @id @default(uuid())
+  orderId    String
+  order      Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menuItemId String
+  menuItem   MenuItem  @relation(fields: [menuItemId], references: [id])
+  quantity   Int       @default(1)
+  unitPrice  Float
+  totalPrice Float
+  specialNote String?
+}
+
+model Transaction {
+  id             String         @id @default(uuid())
+  transactionNumber String      @unique
+  bookingId      String
+  booking        Booking        @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  amount         Float
+  paymentMethod  PaymentMethod
+  status         PaymentStatus  @default(PAID)
+  referenceNote  String?
+  createdAt      DateTime       @default(now())
+}
