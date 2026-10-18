@@ -17,18 +17,31 @@ import { DesktopSidebar } from "@/components/DesktopSidebar";
 import { NotificationCenter } from "@/components/NotificationCenter";
 import { AuthLoginGate } from "@/components/AuthLoginGate";
 import { AccessRestrictedNotice } from "@/components/AccessRestrictedNotice";
+import { RateAllotmentGridView } from "@/components/RateAllotmentGridView";
+import { RoomTypesManagementView } from "@/components/RoomTypesManagementView";
+import { MarketPricingView } from "@/components/MarketPricingView";
+import { PromotionsManagementView } from "@/components/PromotionsManagementView";
+import { HousekeepingView } from "@/components/HousekeepingView";
 import { isUserAdminOrGM, canUserAccessProperty } from "@/types/pms";
 import { usePMS } from "@/context/PMSContext";
 import { X } from "lucide-react";
 
 function PMSMainApp() {
   const { isDatabaseInstalled, currentUser, setActivePropertyId } = usePMS();
+  const VALID_TABS: TabType[] = [
+    "dashboard", "calendar", "pos", "booking", "folio", "admin",
+    "rate-grid", "room-types", "market-pricing", "promotions", "housekeeping"
+  ];
+
   const [activeTab, setActiveTab] = useState<TabType>(() => {
     if (typeof window !== "undefined") {
       try {
         const params = new URLSearchParams(window.location.search);
         const tabParam = params.get("tab") as TabType;
-        if (tabParam && ["dashboard", "calendar", "pos", "booking", "folio", "admin"].includes(tabParam)) {
+        if (tabParam && [
+          "dashboard", "calendar", "pos", "booking", "folio", "admin",
+          "rate-grid", "room-types", "market-pricing", "promotions", "housekeeping"
+        ].includes(tabParam)) {
           return tabParam;
         }
       } catch (e) {
@@ -70,7 +83,7 @@ function PMSMainApp() {
       } else if (propParam === "bugaan" || propParam === "thanawong" || propParam === "all") {
         setActivePropertyId(propParam as any);
       }
-      if (tabParam && ["dashboard", "calendar", "pos", "booking", "folio", "admin"].includes(tabParam)) {
+      if (tabParam && VALID_TABS.includes(tabParam)) {
         setActiveTab(tabParam);
       }
       const roomParam = params.get("roomId");
@@ -87,7 +100,7 @@ function PMSMainApp() {
     const handlePopState = () => {
       const params = new URLSearchParams(window.location.search);
       const tabParam = params.get("tab") as TabType;
-      if (tabParam && ["dashboard", "calendar", "pos", "booking", "folio", "admin"].includes(tabParam)) {
+      if (tabParam && VALID_TABS.includes(tabParam)) {
         setActiveTab(tabParam);
       }
     };
@@ -302,6 +315,26 @@ function PMSMainApp() {
                 onGoToFolio={handleGoToFolio}
               />
             )
+          )}
+
+          {activeTab === "rate-grid" && (
+            <RateAllotmentGridView />
+          )}
+
+          {activeTab === "room-types" && (
+            <RoomTypesManagementView onGoToRateGrid={() => setActiveTab("rate-grid")} />
+          )}
+
+          {activeTab === "market-pricing" && (
+            <MarketPricingView />
+          )}
+
+          {activeTab === "promotions" && (
+            <PromotionsManagementView />
+          )}
+
+          {activeTab === "housekeeping" && (
+            <HousekeepingView />
           )}
         </main>
       </div>

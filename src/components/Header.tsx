@@ -24,6 +24,11 @@ import { TabType } from "@/components/NavigationTabs";
 const tabMeta: Record<TabType, { title: string; subtitle: string }> = {
   dashboard: { title: "สถานะห้องพัก", subtitle: "ภาพรวมผังห้องพักและสถานะเช็คอินแบบ Real-time" },
   calendar: { title: "ปฏิทินไทม์ไลน์", subtitle: "ตารางการจองห้องพักผัง Gantt Chart รายวัน" },
+  "rate-grid": { title: "ปฏิทินห้องที่เปิดให้จอง", subtitle: "ตารางบริหารจำนวนห้องว่าง Allotment และราคาขายรายวันตาม Rate Plans" },
+  "room-types": { title: "ห้องพักและความจุ", subtitle: "กำหนดประเภทห้องพัก จำนวนห้อง และขีดความสามารถการรองรับผู้เข้าพัก" },
+  "market-pricing": { title: "การตั้งราคาอิงตลาด", subtitle: "วิเคราะห์เปรียบเทียบราคาขายกับค่าเฉลี่ยตลาดและโรงแรมคู่แข่งในพื้นที่" },
+  promotions: { title: "โปรโมชั่น & ส่วนลด", subtitle: "บริหารจัดการแคมเปญโปรโมชั่น OTA และตรวจสอบ Audit Trail ย้อนหลัง" },
+  housekeeping: { title: "ตารางทำความสะอาด", subtitle: "ติดตามสถานะความสะอาด มอบหมายงานแม่บ้าน และคิวทำความสะอาดห้องพัก" },
   booking: { title: "เปิดจองห้องพักใหม่", subtitle: "แบบฟอร์มบันทึกรายการจองห้องพักและบริการเสริม" },
   pos: { title: "อาหาร & POS รูมเซอร์วิส", subtitle: "สั่งอาหาร เครื่องดื่ม และมินิบาร์ลงบิลห้องพัก" },
   folio: { title: "บิล & เช็คเอาต์ (Folio)", subtitle: "ตรวจสอบยอดค่าใช้จ่าย พิมพ์ใบเสร็จ และรับชำระเงิน" },

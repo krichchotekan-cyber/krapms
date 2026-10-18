@@ -8,12 +8,28 @@ import {
   PlusCircle, 
   Receipt, 
   Settings,
-  Lock
+  Lock,
+  Grid3X3,
+  BedDouble,
+  TrendingUp,
+  Tag,
+  Sparkles
 } from "lucide-react";
 import { usePMS } from "@/context/PMSContext";
 import { isUserAdminOrGM } from "@/types/pms";
 
-export type TabType = "dashboard" | "calendar" | "pos" | "booking" | "folio" | "admin";
+export type TabType = 
+  | "dashboard" 
+  | "calendar" 
+  | "pos" 
+  | "booking" 
+  | "folio" 
+  | "admin"
+  | "rate-grid"
+  | "room-types"
+  | "market-pricing"
+  | "promotions"
+  | "housekeeping";
 
 interface NavigationProps {
   activeTab: TabType;
@@ -25,10 +41,15 @@ export function NavigationTabs({ activeTab, setActiveTab }: NavigationProps) {
   const tabs = [
     { id: "dashboard", label: "สถานะห้องพัก", sub: "Live Status", icon: LayoutDashboard },
     { id: "calendar", label: "ปฏิทินไทม์ไลน์", sub: "Timeline Gantt", icon: CalendarDays },
+    { id: "rate-grid", label: "ปฏิทินห้องว่าง & ราคา", sub: "Rate Grid", icon: Grid3X3 },
+    { id: "room-types", label: "ห้องพักและความจุ", sub: "Capacity", icon: BedDouble },
+    { id: "market-pricing", label: "การตั้งราคาอิงตลาด", sub: "Rate Intelligence", icon: TrendingUp },
+    { id: "promotions", label: "โปรโมชั่น", sub: "Deals", icon: Tag },
+    { id: "housekeeping", label: "ตารางทำความสะอาด", sub: "Housekeeping", icon: Sparkles },
     { id: "booking", label: "จองห้องพัก", sub: "New Booking", icon: PlusCircle },
     { id: "pos", label: "อาหาร & POS", sub: "Room Service", icon: UtensilsCrossed },
     { id: "folio", label: "บิล & เช็คเอาต์", sub: "Billing & Folio", icon: Receipt },
-    { id: "admin", label: "ระบบหลังบ้าน", sub: "Backoffice & Excel", icon: Settings },
+    { id: "admin", label: "ระบบหลังบ้าน", sub: "Backoffice & Settings", icon: Settings },
   ].filter((tab) => tab.id !== "admin" || isUserAdminOrGM(currentUser));
 
   return (

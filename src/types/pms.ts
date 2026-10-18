@@ -401,3 +401,85 @@ export interface PropertyPromptPayConfig {
   autoFillAmount: boolean;
   note?: string;
 }
+
+// ==========================================
+// Room Types & Capacity Management (ZUZU-style)
+// ==========================================
+export interface RoomTypeConfig {
+  id: string;
+  propertyId: PropertyId;
+  name: string;
+  totalRooms: number;
+  maxOccupancy: number;
+  maxAdults: number;
+  maxKids: number;
+  basePrice: number;
+  description?: string;
+  isActive: boolean;
+}
+
+// ==========================================
+// Promotions & Deals Management (ZUZU-style)
+// ==========================================
+export interface PromotionItem {
+  id: string;
+  propertyId: PropertyId | "all";
+  name: string;
+  details: string;
+  otaChannels: string[];
+  roomTypes: string[];
+  ratePlans: string[];
+  isAutoPromoEligible: boolean;
+  isActive: boolean;
+  discountType: "PERCENT" | "FIXED_AMOUNT";
+  discountValue: number;
+  startDate?: string;
+  endDate?: string;
+  createdAt: string;
+}
+
+// ==========================================
+// Rate Change Logs / Audit Trail
+// ==========================================
+export interface RateChangeLog {
+  id: string;
+  timestamp: string;
+  userName: string;
+  propertyId: PropertyId;
+  roomType: string;
+  ratePlan: string;
+  oldRate: number;
+  newRate: number;
+  reason: string;
+}
+
+// ==========================================
+// Market Pricing & Competitor Intelligence
+// ==========================================
+export interface MarketCompetitor {
+  id: string;
+  name: string;
+  color: string;
+  avgPrice: number;
+  isSelected: boolean;
+}
+
+// ==========================================
+// Housekeeping Management
+// ==========================================
+export type HousekeepingStatus = "CLEAN" | "DIRTY" | "INSPECTING" | "OUT_OF_ORDER";
+
+export interface HousekeepingTask {
+  id: string;
+  propertyId: PropertyId;
+  roomId: string;
+  roomNumber: string;
+  roomType: string;
+  floor: number;
+  status: HousekeepingStatus;
+  assignedStaff?: string;
+  priority: "NORMAL" | "HIGH" | "URGENT";
+  guestStatus: "VACANT" | "CHECK_IN_TODAY" | "STAY_OVER" | "CHECK_OUT_TODAY";
+  note?: string;
+  lastCleanedAt?: string;
+}

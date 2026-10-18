@@ -26,7 +26,11 @@ import {
   Sparkles,
   ChevronRight,
   Lock,
-  Bell
+  Bell,
+  BedDouble,
+  TrendingUp,
+  Tag,
+  Grid3X3
 } from "lucide-react";
 
 interface DesktopSidebarProps {
@@ -89,10 +93,15 @@ export function DesktopSidebar({
   const navItems = [
     { id: "dashboard" as TabType, label: "สถานะห้องพัก", sub: "Live Room Status", icon: LayoutDashboard },
     { id: "calendar" as TabType, label: "ปฏิทินไทม์ไลน์", sub: "Gantt Timeline", icon: CalendarDays },
+    { id: "rate-grid" as TabType, label: "ปฏิทินห้องว่าง & ราคา", sub: "Rate & Allotment Grid", icon: Grid3X3 },
+    { id: "room-types" as TabType, label: "ห้องพักและความจุ", sub: "Room Types & Capacity", icon: BedDouble },
+    { id: "market-pricing" as TabType, label: "การตั้งราคาอิงตลาด", sub: "Rate Intelligence", icon: TrendingUp },
+    { id: "promotions" as TabType, label: "โปรโมชั่น & ส่วนลด", sub: "Promotions & Deals", icon: Tag },
+    { id: "housekeeping" as TabType, label: "ตารางทำความสะอาด", sub: "Housekeeping Schedule", icon: Sparkles },
     { id: "booking" as TabType, label: "เปิดจองห้องพัก", sub: "New Reservation", icon: PlusCircle },
     { id: "pos" as TabType, label: "อาหาร & POS", sub: "Room Service & Minibar", icon: UtensilsCrossed },
     { id: "folio" as TabType, label: "บิล & เช็คเอาต์", sub: "Billing & Folio", icon: Receipt },
-    { id: "admin" as TabType, label: "ระบบหลังบ้าน", sub: "Backoffice & Excel Export", icon: Settings },
+    { id: "admin" as TabType, label: "ระบบหลังบ้าน", sub: "Backoffice & Settings", icon: Settings },
   ].filter((item) => item.id !== "admin" || isUserAdminOrGM(currentUser));
 
   return (
